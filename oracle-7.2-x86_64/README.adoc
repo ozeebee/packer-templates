@@ -1,0 +1,42 @@
+= Oracle Linux 7.2 Packer template
+
+https://www.packer.io/[Packer^] template to create a *minimal* _Oracle Linux 7.2 64 bit_ box to be used with VirtualBox and Vagrant.
+
+== Pre-requisites
+
+. Install https://www.packer.io/[Packer^] (tested with Packer 0.10.1)
+
+	brew cask install packer
+
+. Install https://www.virtualbox.org/[VirtualBox^] (tested with VirtualBox 5.1.2)
+
+	brew cask intall virtualbox
+
+. Download the Oracle Linux 7.2 ISO Image and place it in the `iso/` folder. It can be obtained from
+.. the 'official' Oracle repository: https://edelivery.oracle.com/linux
+.. or from a mirror: http://mirrors.dotsrc.org/oracle-linux/OL7/u2/x86_64/OracleLinux-R7-U2-Server-x86_64-dvd.iso
+
+. Install https://www.vagrantup.com/[Vagrant^] (for testing)
+
+	brew cask install vagrant
+
+== Description
+
+The generated output is a *minimal* server image that can be imported in Vagrant or used by VirtualBox.
+
+== Building
+
+Simply run packer
+
+	packer build template.json
+
+If you want to customize the ISO location, you can pass a parameter
+
+	packer build -var 'iso_location=http://mirrors.dotsrc.org/oracle-linux/OL7/u2/' template.json
+
+== Testing
+
+Add the generated box in Vagrant:
+
+	vagrant box add build/packer-oracle-7.2-x86_64.box --name packer-oracle-7.2-x86_64
+

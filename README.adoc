@@ -1,0 +1,9 @@
+= Packer templates
+
+My collection of https://www.packer.io/[Packer^] templates.
+
+== Available templates
+
+* <<oracle-7.2-x86_64/README.adoc, oracle-7.2-x86_64 minimal server image>>
+* <<oracle-7.3-x86_64/README.adoc, oracle-7.3-x86_64 minimal server image>>
+
