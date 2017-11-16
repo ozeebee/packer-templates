@@ -1,0 +1,64 @@
+{
+	"variables": {
+    	"vm_name": "packer-oracle-7.4-x86_64",
+    	"iso_location": "iso"
+    },	
+    "builders": [
+		{
+			"vm_name": "{{user `vm_name`}}",
+			"type": "virtualbox-iso",
+			"guest_os_type": "Oracle_64",
+
+			"iso_url": "{{user `iso_location`}}/OracleLinux-R7-U4-Server-x86_64-dvd.iso",
+			"iso_checksum": "a855783f4cd8bdd17b785591a21746eda7abf476",
+			"iso_checksum_type": "sha1",
+
+			"output_directory": "build/{{user `vm_name`}}",
+			"http_directory": "http",
+
+			"hard_drive_interface": "sata",
+			"disk_size": 51200,
+			"vboxmanage": [
+				["modifyvm", "{{.Name}}", "--cpus", "1"] ,
+				["modifyvm", "{{.Name}}", "--memory", "1024"],
+				["modifyvm", "{{.Name}}", "--vram", "12"],
+				["modifyvm", "{{.Name}}", "--rtcuseutc", "on"],
+				["modifyvm", "{{.Name}}", "--audio", "none"],
+				["modifyvm", "{{.Name}}", "--usb", "off"],
+				["modifyvm", "{{.Name}}", "--usbehci", "off"]
+			],
+
+			"headless": false,
+			"boot_wait": "5s",
+			"boot_command": [
+				"<tab> net.ifnames=0 biosdevname=0 text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+			],
+
+			"guest_additions_mode": "upload",
+
+			"ssh_username": "vagrant",
+			"ssh_password": "vagrant",
+			"ssh_port": 22,
+			"ssh_wait_timeout": "10m",
+			"shutdown_command": "echo 'vagrant' | sudo -S shutdown -P now",
+			"virtualbox_version_file": ".vbox_version"
+		}
+	],
+	"provisioners": [
+		{
+			"type": "shell",
+			"execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E sh {{.Path}}",
+			"scripts": ["scripts/repo-update.sh", "scripts/vm-setup.sh", "scripts/minimize.sh"],
+			"expect_disconnect": true
+		}
+	],
+	"post-processors": [
+		{
+			"type": "vagrant",
+			"output": "build/{{user `vm_name`}}.box",
+			"only": ["virtualbox-iso"],
+			"keep_input_artifact": true,
+			"compression_level": 6
+		}
+	]
+}

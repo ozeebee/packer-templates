@@ -6,4 +6,8 @@ My collection of https://www.packer.io/[Packer^] templates.
 
 * link:oracle-7.2-x86_64/[oracle-7.2-x86_64 minimal server image]
 * link:oracle-7.3-x86_64/[oracle-7.3-x86_64 minimal server image]
+* link:oracle-7.4-x86_64/[oracle-7.4-x86_64 minimal server image]
 
+== Other resources
+
+You may also want to have a look at this project: https://github.com/boxcutter/oraclelinux
